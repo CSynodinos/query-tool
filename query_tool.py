@@ -18,7 +18,7 @@ class RegexError(Exception):
         else:
             return 'RegexError has been raised'
 
-class tools:
+class __tools:
     def __init__(self, fl, pattern) -> None:
         self.fl = fl
         self.pattern = pattern
@@ -53,7 +53,7 @@ class tools:
                 found[key] = value
         return found
 
-class query_tool(tools):
+class query_tool(__tools):
     def __init__(self, fl, pattern) -> None:
         super().__init__(fl, pattern)
 
@@ -63,7 +63,7 @@ class query_tool(tools):
         return f'{__class__.__name__}({params[0]} = "{self.fl}", {params[1]} = "{self.pattern}")'
 
     def query(self, show_idx = True):
-        dictionary = tools(fl = self.fl, pattern = self.pattern)._get_matches()
+        dictionary = __tools(fl = self.fl, pattern = self.pattern)._get_matches()
         print(f"There are {len(dictionary)} matches to the pattern {self.pattern}")
         if show_idx:
             keys = []
