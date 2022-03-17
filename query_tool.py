@@ -89,6 +89,7 @@ class query_tool(__tools):
         else:
             self._dict_parser(dictionary = dictionary)[0]
 
+## Testing
 if __name__ == "__main__":
     get = query_tool(fl = "an_example.txt", pattern = "html")
     get.query()
