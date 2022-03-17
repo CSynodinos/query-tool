@@ -1,4 +1,5 @@
-.venv
 # Files
 *.txt
 *.fasta
+.venv
+__pycache__
