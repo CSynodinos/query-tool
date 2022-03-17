@@ -62,19 +62,32 @@ class query_tool(__tools):
         params.remove("self")
         return f'{__class__.__name__}({params[0]} = "{self.fl}", {params[1]} = "{self.pattern}")'
 
-    def query(self, show_idx = True):
+    def _dict_parser(dictionary):
+        keys = []
+        values = []
+        for key, value in dictionary.items():
+            keys.append(key)
+            values.append(value)
+
+        keys = tuple(keys)
+        keys = ", ".join(keys)
+        values = tuple(values)
+        values = ", ".join(values)
+        return keys, values
+
+    def query(self, show_idx = True, get_matches = False):
         dictionary = __tools(fl = self.fl, pattern = self.pattern)._get_matches()
         print(f"There are {len(dictionary)} matches to the pattern {self.pattern}")
         if show_idx:
-            keys = []
-            for key, value in dictionary.items():
-                keys.append(key)
-            keys = tuple(keys)
-            keys = ", ".join(keys)
+            keys = self._dict_parser(dictionary = dictionary)[0]
             if len(keys) > 1:
                 print(f"Pattern can be found in lines: {keys}.")
             else:
                 print(f"Pattern can be found in line {keys}.")
+        if get_matches:
+            return self._dict_parser(dictionary = dictionary)[0], self._dict_parser(dictionary = dictionary)[1]
+        else:
+            self._dict_parser(dictionary = dictionary)[0]
 
 if __name__ == "__main__":
     get = query_tool(fl = "an_example.txt", pattern = "html")
