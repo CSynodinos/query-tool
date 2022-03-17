@@ -3,3 +3,6 @@
 *.fasta
 .venv
 __pycache__
+*.csv
+*.db
+.DS_Store

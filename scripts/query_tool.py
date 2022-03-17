@@ -1,5 +1,5 @@
 import inspect
-from tools import search_tools
+from scripts.tools import search_tools
 
 class query_tool(search_tools):
     def __init__(self, fl, pattern) -> None:
@@ -29,10 +29,16 @@ class query_tool(search_tools):
         print(f"There are {len(matches)} matches to the pattern {self.pattern}")
         if show_idx:
             keys = self._dict_parser(dictionary = matches)[0]
-            if len(keys) > 1:
-                print(f"Pattern can be found in lines: {keys}.")
-            else:
-                print(f"Pattern can be found in line {keys}.")
+            if self.fl.endswith('.txt'):
+                if len(keys) > 1:
+                    print(f"Pattern can be found in lines: {keys}.")
+                else:
+                    print(f"Pattern can be found in line {keys}.")
+            elif self.fl.endswith('.csv'):
+                if len(keys) > 1:
+                    print(f"Pattern can be found in columns: {keys}.")
+                else:
+                    print(f"Pattern can be found in column {keys}.")
         if get_matches:
             return self._dict_parser(dictionary = matches)[0], self._dict_parser(dictionary = matches)[1]
         else:
