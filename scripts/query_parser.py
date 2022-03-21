@@ -1,8 +1,10 @@
+from __future__ import annotations
+
 import inspect
 from scripts.search_tool import search_tools
 
 class query_tool(search_tools):
-    def __init__(self, fl, pattern) -> None:
+    def __init__(self, fl: str, pattern: str) -> None:
         super().__init__(fl, pattern)
 
     def __repr__(self) -> str:
@@ -11,7 +13,7 @@ class query_tool(search_tools):
         return f'{__class__.__name__}({params[0]} = "{self.fl}", {params[1]} = "{self.pattern}")'
 
     @staticmethod
-    def _dict_parser(dictionary):
+    def _dict_parser(dictionary: dict) -> tuple[str, str]:
         keys = []
         values = []
         for key, value in dictionary.items():
@@ -24,7 +26,7 @@ class query_tool(search_tools):
         values = ", ".join(values)
         return keys, values
 
-    def query(self, show_idx = True, get_matches = False):
+    def query(self, show_idx = True, get_matches = False) -> (tuple[str, str] | str):
         matches = search_tools(fl = self.fl, pattern = self.pattern)._get_matches()
         print(f"There are {len(matches)} matches to the pattern {self.pattern}")
         if show_idx:
@@ -42,4 +44,4 @@ class query_tool(search_tools):
         if get_matches:
             return self._dict_parser(dictionary = matches)[0], self._dict_parser(dictionary = matches)[1]
         else:
-            self._dict_parser(dictionary = matches)[0]
+            return self._dict_parser(dictionary = matches)[0]

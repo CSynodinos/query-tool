@@ -1,5 +1,8 @@
+from __future__ import annotations
+
 import re, csv, sqlite3
 import pandas as pd
+import os
 
 class RegexError(Exception):
     """Custom exception class for non-existant patterns."""
@@ -19,11 +22,11 @@ class RegexError(Exception):
             return 'RegexError has been raised'
 
 class search_tools:
-    def __init__(self, fl, pattern) -> None:
+    def __init__(self, fl: str, pattern: str) -> None:
         self.fl = fl
         self.pattern = pattern
 
-    def _fl_parser(self):
+    def _fl_parser(self) -> (list | dict):
         
         assert self.fl
         if self.fl.endswith('.txt'):
@@ -47,7 +50,12 @@ class search_tools:
                     headers.append(row)
                     break
                 headers = [item for elem in headers for item in elem]
-            con = sqlite3.connect("temp.db") # change to 'sqlite:///your_filename.db'
+
+                db_name = f"{self.fl.rsplit('.', 1)[0]}.db"
+                if not len(os.path.split(db_name)[0]) == 0:
+                    db_name = os.path.split(db_name)[1]
+
+            con = sqlite3.connect(db_name) # change to 'sqlite:///your_filename.db'
             cur = con.cursor()
             pd.read_csv(self.fl).to_sql("Table_1", con, 
                                         if_exists = 'replace', index = False)
@@ -66,10 +74,9 @@ class search_tools:
                                 data_found[i] = k
         return data_found
 
-    def _get_matches(self):
+    def _get_matches(self) -> dict:
         
         parser_out = self._fl_parser()
-        print(parser_out)
         found = {}
         if isinstance(parser_out, list):
             lst_str = ''.join(parser_out)
