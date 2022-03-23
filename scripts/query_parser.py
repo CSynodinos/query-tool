@@ -26,22 +26,28 @@ class query_tool(search_tools):
         values = ", ".join(values)
         return keys, values
 
-    def query(self, show_idx = True, get_matches = False) -> (tuple[str, str] | str):
+    def query(self, show_idx = True) -> dict:
         matches = search_tools(fl = self.fl, pattern = self.pattern)._get_matches()
-        print(f"There are {len(matches)} matches to the pattern {self.pattern}")
+        keys = self._dict_parser(dictionary = matches)[0]
+        values = self._dict_parser(dictionary = matches)[1]
+        txt_ext = ('.txt', '.ini', '.fasta')
         if show_idx:
-            keys = self._dict_parser(dictionary = matches)[0]
-            if self.fl.endswith('.txt'):
+            print(f"There are {len(matches)} matches to the pattern {self.pattern}")
+            if self.fl.endswith(txt_ext):
                 if len(keys) > 1:
-                    print(f"Pattern can be found in lines: {keys}.")
+                    print(f"Pattern can be found on lines: {keys}.")
                 else:
-                    print(f"Pattern can be found in line {keys}.")
+                    print(f"Pattern can be found on line {keys}.")
             elif self.fl.endswith('.csv'):
                 if len(keys) > 1:
-                    print(f"Pattern can be found in columns: {keys}.")
+                    print(f"Pattern can be found on columns: {keys}.")
                 else:
-                    print(f"Pattern can be found in column {keys}.")
-        if get_matches:
-            return self._dict_parser(dictionary = matches)[0], self._dict_parser(dictionary = matches)[1]
-        else:
-            return self._dict_parser(dictionary = matches)[0]
+                    print(f"Pattern can be found on column {keys}.")
+        out_dict = {}
+        for key, value in zip(list(keys.split(",")), list(values.split(","))):
+            if self.fl.endswith(txt_ext):
+                key = f"Line {key}"
+            elif self.fl.endswith(".csv"):
+                key = f"column; {key}"
+            out_dict[key] = value
+        return out_dict

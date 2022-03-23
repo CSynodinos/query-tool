@@ -29,7 +29,8 @@ class search_tools:
     def _fl_parser(self) -> (list | dict):
         
         assert self.fl
-        if self.fl.endswith('.txt'):
+        txt_ext = ('.txt', '.ini', '.fasta')
+        if self.fl.endswith(txt_ext):
             data_found = []
             with open(self.fl, "r") as txt:
                 lines = txt.readlines()
