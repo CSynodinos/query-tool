@@ -4,6 +4,12 @@ import re, csv, sqlite3
 import pandas as pd
 import os
 
+def fl_nm_parser(flstr, f_type):
+    nm = f"{flstr.rsplit('.', 1)[0]}.{f_type}"
+    if not len(os.path.split(nm)[0]) == 0:
+        nm = os.path.split(nm)[1]
+    return nm
+
 class RegexError(Exception):
     """Custom exception class for non-existant patterns."""
 
@@ -52,11 +58,9 @@ class search_tools:
                     break
                 headers = [item for elem in headers for item in elem]
 
-                db_name = f"{self.fl.rsplit('.', 1)[0]}.db"
-                if not len(os.path.split(db_name)[0]) == 0:
-                    db_name = os.path.split(db_name)[1]
+                db_name = fl_nm_parser(flstr = self.fl, f_type = "db")
 
-            con = sqlite3.connect(db_name) # change to 'sqlite:///your_filename.db'
+            con = sqlite3.connect(db_name)
             cur = con.cursor()
             pd.read_csv(self.fl).to_sql("Table_1", con, 
                                         if_exists = 'replace', index = False)
@@ -73,6 +77,8 @@ class search_tools:
                         for k in temp_lst:
                             if k in self.pattern:
                                 data_found[i] = k
+            os.remove(db_name) # Remove tmp db file.
+
         return data_found
 
     def _get_matches(self) -> dict:
@@ -92,4 +98,5 @@ class search_tools:
                     found[key] = value
         else:
             found = parser_out
+
         return found

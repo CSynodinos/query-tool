@@ -3,8 +3,9 @@ from __future__ import annotations
 
 import argparse
 import json
-import os
 from scripts.query_parser import query_tool
+from scripts.search_tool import fl_nm_parser
+
 
 def args_parser(msg) -> argparse.Namespace:
     """Custom argument parser.
@@ -43,9 +44,8 @@ def main():
 
     out = query_tool(fl = f, pattern = p).query(show_idx = info)
     if to_json:
-        json_n = f"{f.rsplit('.', 1)[0]}.json"
-        if not len(os.path.split(json_n)[0]) == 0:
-            json_n = os.path.split(json_n)[1]
+        json_n = fl_nm_parser(flstr = f, f_type = "json")
+        print(json_n)
         with open(json_n, 'w') as json_file:
             json.dump(out, json_file)
     return out

@@ -28,8 +28,7 @@ class query_tool(search_tools):
 
     def query(self, show_idx = True) -> dict:
         matches = search_tools(fl = self.fl, pattern = self.pattern)._get_matches()
-        keys = self._dict_parser(dictionary = matches)[0]
-        values = self._dict_parser(dictionary = matches)[1]
+        keys, values = self._dict_parser(dictionary = matches)
         txt_ext = ('.txt', '.ini', '.fasta')
         if show_idx:
             print(f"There are {len(matches)} matches to the pattern {self.pattern}")
@@ -43,6 +42,7 @@ class query_tool(search_tools):
                     print(f"Pattern can be found on columns: {keys}.")
                 else:
                     print(f"Pattern can be found on column {keys}.")
+
         out_dict = {}
         for key, value in zip(list(keys.split(",")), list(values.split(","))):
             if self.fl.endswith(txt_ext):
@@ -50,4 +50,5 @@ class query_tool(search_tools):
             elif self.fl.endswith(".csv"):
                 key = f"column; {key}"
             out_dict[key] = value
+
         return out_dict
