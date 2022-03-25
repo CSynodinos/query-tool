@@ -1,17 +1,14 @@
+#!/usr/bin/env python3
 from __future__ import annotations
 
-import re, csv, sqlite3
+import re, csv
 import pandas as pd
 import os
-
-def fl_nm_parser(flstr, f_type):
-    nm = f"{flstr.rsplit('.', 1)[0]}.{f_type}"
-    if not len(os.path.split(nm)[0]) == 0:
-        nm = os.path.split(nm)[1]
-    return nm
+import inspect
 
 class RegexError(Exception):
-    """Custom exception class for non-existant patterns."""
+    """Custom exception class for non-existant patterns.
+    """
 
     __module__ = 'builtins'
 
@@ -28,17 +25,36 @@ class RegexError(Exception):
             return 'RegexError has been raised'
 
 class search_tools:
+    """_summary_
+
+    Raises:
+        RegexError: _description_
+
+    Returns:
+        _type_: _description_
+    """
+
+    txt_ext = ('.txt', '.ini', '.fasta')
+    sp_ext = ('.csv', '.tsv')
+
     def __init__(self, fl: str, pattern: str) -> None:
         self.fl = fl
         self.pattern = pattern
 
-    def _fl_parser(self) -> (list | dict):
+    def __repr__(self) -> str:
+        params = inspect.getfullargspec(__class__).args
+        params.remove("self")
+        return f'{__class__.__name__}({params[0]} = "{self.fl}", {params[1]} = "{self.pattern}")'
+
+    @classmethod
+    def _fl_parser(cls, fl: str, pat: str) -> (list | dict):
         
-        assert self.fl
-        txt_ext = ('.txt', '.ini', '.fasta')
-        if self.fl.endswith(txt_ext):
+        assert fl, 'No file name or path was provided.'
+        assert pat, 'No pattern was provided.'
+
+        if fl.endswith(cls.txt_ext):
             data_found = []
-            with open(self.fl, "r") as txt:
+            with open(fl, "r") as txt:
                 lines = txt.readlines()
                 txt.seek(0)
                 for index, line in enumerate(lines):
@@ -46,9 +62,9 @@ class search_tools:
                     ln_index = ln_index.replace('\n', '')
                     data_found.append(ln_index)
 
-        elif self.fl.endswith('.csv'):
+        elif fl.endswith(cls.sp_ext):
             data_found = {}
-            with open(self.fl, "r", encoding = 'utf-8-sig') as csv_file:
+            with open(fl, "r", encoding = 'utf-8-sig') as csv_file:
                 csv_reader = csv.reader(csv_file, delimiter = ',')
                 headers = []
             
@@ -58,14 +74,15 @@ class search_tools:
                     break
                 headers = [item for elem in headers for item in elem]
 
-                db_name = fl_nm_parser(flstr = self.fl, f_type = "db")
+                db_name = "tmp.db"
 
+            import sqlite3
             con = sqlite3.connect(db_name)
             cur = con.cursor()
-            pd.read_csv(self.fl).to_sql("Table_1", con, 
+            pd.read_csv(fl).to_sql("Table_1", con, 
                                         if_exists = 'replace', index = False)
             for i in headers:
-                statement = f"SELECT * FROM Table_1 WHERE {i} LIKE '{self.pattern}';"
+                statement = f"SELECT * FROM Table_1 WHERE {i} LIKE '{pat}';"
                 cur.execute(statement)
                 result = cur.fetchall() # get all matches from column i
                 if len(result) == 0:
@@ -75,15 +92,14 @@ class search_tools:
                     for x in result:
                         temp_lst = x
                         for k in temp_lst:
-                            if k in self.pattern:
+                            if k in pat:
                                 data_found[i] = k
             os.remove(db_name) # Remove tmp db file.
-
         return data_found
 
     def _get_matches(self) -> dict:
         
-        parser_out = self._fl_parser()
+        parser_out = self._fl_parser(fl = self.fl, pat = self.pattern)
         found = {}
         if isinstance(parser_out, list):
             lst_str = ''.join(parser_out)
@@ -97,6 +113,5 @@ class search_tools:
                     value = value.strip()
                     found[key] = value
         else:
-            found = parser_out
-
+            return parser_out
         return found

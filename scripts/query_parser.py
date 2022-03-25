@@ -1,3 +1,4 @@
+#!/usr/bin/env python3
 from __future__ import annotations
 
 import inspect
@@ -14,6 +15,15 @@ class query_tool(search_tools):
 
     @staticmethod
     def _dict_parser(dictionary: dict) -> tuple[str, str]:
+        """Dictionary parser.
+
+        Args:
+            * `dictionary` (dict): dictionary object.
+
+        Returns:
+            tuple[str, str]: keys and values of a dictionary as separate strings.
+        """
+
         keys = []
         values = []
         for key, value in dictionary.items():
@@ -26,13 +36,14 @@ class query_tool(search_tools):
         values = ", ".join(values)
         return keys, values
 
-    def query(self, show_idx = True) -> dict:
-        matches = search_tools(fl = self.fl, pattern = self.pattern)._get_matches()
+    def query(self, show_idx) -> dict:
+        
+        matches = self._get_matches()
         keys, values = self._dict_parser(dictionary = matches)
-        txt_ext = ('.txt', '.ini', '.fasta')
+
         if show_idx:
             print(f"There are {len(matches)} matches to the pattern {self.pattern}")
-            if self.fl.endswith(txt_ext):
+            if self.fl.endswith(self.txt_ext):
                 if len(keys) > 1:
                     print(f"Pattern can be found on lines: {keys}.")
                 else:
@@ -45,10 +56,5 @@ class query_tool(search_tools):
 
         out_dict = {}
         for key, value in zip(list(keys.split(",")), list(values.split(","))):
-            if self.fl.endswith(txt_ext):
-                key = f"Line {key}"
-            elif self.fl.endswith(".csv"):
-                key = f"column; {key}"
             out_dict[key] = value
-
         return out_dict
