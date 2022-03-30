@@ -36,7 +36,8 @@ def args_parser(msg) -> argparse.Namespace:
     parser.add_argument("-f", help = "Input file.")
     parser.add_argument("-p", help = "Pattern to look for.")
     parser.add_argument("-json", help = "Optional argument: Export into .json file format.")
-    parser.add_argument("-db", help = "Optional argument: Write the .json output file in a new database when option -json is used.")
+    parser.add_argument("-db", help = "Optional argument: Write the .json output file in a new database when option -json is used. If -pg option is not set, the database will be sqlite3")
+    parser.add_argument("-pg", help = "Optional argument: Write the .json output file in a new postgres 4 database when option -json is used.")
     parser.add_argument("-inf", help = "Optional argument: Display information about findings.")
     return parser.parse_args()
 
@@ -76,20 +77,30 @@ def main():
     p = arguments.get('p')
     to_json = bool_parser(arguments.get('json'))
     json_to_db = bool_parser(arguments.get('db'))
+    json_to_db_pg = bool_parser(arguments.get('pg'))
     info = bool_parser(arguments.get('inf'))
 
     out = query_tool(fl = f, pattern = p).query(show_idx = info)
     if to_json:
         import json
         json_n = _fl_nm_parser(flstr = f, f_type = "json")
-        print(json_n)
         with open(json_n, 'w') as json_file:
             json.dump(out, json_file)
+
         if json_to_db:
-            pass
-            return out
+            if json_to_db_pg:
+                print('Insertion of .json keys and values into a postgres4 database.')
+                output = json_db(db_type = 'postgres', json_f = json_n).invoker()
+                print(f'Operation Complete! Data parsed into the {output} database.')
+                return out
+            else:
+                print('Insertion of .json keys and values into a sqlite3 database.')
+                json_db(db_type = 'sqlite', json_f = json_n).invoker()
+                print('Operation Complete!')
+                return out
         else:
             return out
+
     if not to_json:
         if json_to_db:
             raise RuntimeError("Option -db was used without setting option -json as True.")
