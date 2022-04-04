@@ -22,6 +22,7 @@ def _fl_nm_parser(flstr: str, f_type: str) -> str:
     nm = f"{flstr.rsplit('.', 1)[0]}.{f_type}"
     if not len(os.path.split(nm)[0]) == 0:
         nm = os.path.split(nm)[1]
+        print('test')
     return nm
 
 def __json_df_parser(jfl: str) -> pd.DataFrame:
