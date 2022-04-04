@@ -42,29 +42,29 @@ def args_parser(msg) -> argparse.Namespace:
     return parser.parse_args()
 
 def bool_parser(var: any) -> bool:
-        """Check if parameter is boolean, if not, convert it to boolean.
+    """Check if parameter is boolean, if not, convert it to boolean.
 
-        Args:
-            * `var` ([type]: Any): variable to check for boolean.
+    Args:
+        * `var` ([type]: Any): variable to check for boolean.
 
-        Raises:
-            TypeError: When unable to convert to boolean.
+    Raises:
+        TypeError: When unable to convert to boolean.
 
-        Returns:
-            [type]: Boolean value.
-        """
+    Returns:
+        [type]: Boolean value.
+    """
 
-        _true = ["true", "True", "1"]
-        _false = ["false", "False", "0", None]
-        if type(var) == bool:
-            return var
+    _true = ["true", "True", "1"]
+    _false = ["false", "False", "0", None]
+    if type(var) == bool:
+        return var
+    else:
+        if var in _true:
+            return True
+        elif var in _false:
+            return False
         else:
-            if var in _true:
-                return True
-            elif var in _false:
-                return False
-            else:
-                raise TypeError(f"{var} must be true, True, 1, False, false, 0 or None.")
+            raise TypeError(f"{var} must be true, True, 1, False, false, 0 or None.")
 
 def main():
     message = ("Regex Query Tool. Returns a python dictionary with keys being all the lines/columns" 
@@ -80,7 +80,7 @@ def main():
     json_to_db_pg = bool_parser(arguments.get('pg'))
     info = bool_parser(arguments.get('inf'))
 
-    out = query_tool(fl = f, pattern = p).query(show_idx = info)
+    out = query_tool(fl = f, pattern = p).query_wrapper(show_idx = info)
     if to_json:
         import json
         json_n = _fl_nm_parser(flstr = f, f_type = "json")
@@ -90,12 +90,12 @@ def main():
         if json_to_db:
             if json_to_db_pg:
                 print('Insertion of .json keys and values into a postgres4 database.')
-                output = json_db(db_type = 'postgres', json_f = json_n).invoker()
+                output = json_db(db_type = 'postgres', jsonf = json_n).invoker()
                 print(f'Operation Complete! Data parsed into the {output} database.')
                 return out
             else:
                 print('Insertion of .json keys and values into a sqlite3 database.')
-                json_db(db_type = 'sqlite', json_f = json_n).invoker()
+                json_db(db_type = 'sqlite', jsonf = json_n).invoker()
                 print('Operation Complete!')
                 return out
         else:

@@ -17,14 +17,12 @@ class ini_handler:
     * pgport = a_port
     """
 
-    def __init__(self, ini):
+    def __init__(self, ini: str) -> None:
         self.ini = ini
 
     @staticmethod
     def __ini_parser(ini: str) -> tuple[str, str, str, str, str]:
-        """`Static method`
-
-        Extracts contents of .ini file into a tuple of strings.
+        """Extracts contents of .ini file into a tuple of strings.
         5 strings are returned for 5 fields.
 
         Args:
@@ -45,14 +43,12 @@ class ini_handler:
 
         return database, pguser, pgpswd, pghost, pgport
 
-    def _ini_to_dict(self):
-        """`Instanced method`
-
-        Returns contents of .ini file into a python dictionary.
+    def _ini_to_dict(self) -> dict:
+        """Returns contents of .ini file into a python dictionary.
         5 fields, database name, username, password, host and port.
 
         Returns:
-            _type_: dict: The dictionary.
+            The python dictionary.
         """
 
         database, pguser, pgpswd, pghost, pgport= self.__ini_parser(ini = self.ini)

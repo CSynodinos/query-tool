@@ -5,6 +5,9 @@ import inspect
 from scripts.search_tool import search_tools
 
 class query_tool(search_tools):
+    """Query tool class containing methods to run queries for regex patterns in files.
+    """
+
     def __init__(self, fl: str, pattern: str) -> None:
         super().__init__(fl, pattern)
 
@@ -18,7 +21,7 @@ class query_tool(search_tools):
         """Dictionary parser.
 
         Args:
-            * `dictionary` (dict): dictionary object.
+            * `dictionary` (_type_: dict): Dictionary object.
 
         Returns:
             tuple[str, str]: keys and values of a dictionary as separate strings.
@@ -36,8 +39,16 @@ class query_tool(search_tools):
         values = ", ".join(values)
         return keys, values
 
-    def query(self, show_idx) -> dict:
-        
+    def query_wrapper(self, show_idx) -> dict:
+        """Run a SQL query. This method is a wrapper to the methods holding the queries.
+
+        Args:
+            * `show_idx` (_type_: bool): Shows regex information in stdout.
+
+        Returns:
+            dict: Keys are equal to file locations and values are matched information.
+        """
+
         matches = self._get_matches()
         keys, values = self._dict_parser(dictionary = matches)
 

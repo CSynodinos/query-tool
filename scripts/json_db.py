@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 from __future__ import annotations
 
-import os, json
+import os, json, inspect
 import numpy as np
 import pandas as pd
 from pathlib import Path
@@ -39,7 +39,7 @@ def __json_df_parser(jfl: str) -> pd.DataFrame:
         data = dict((k.strip(), v.strip()) for k, v in data.items())    # Replace leading and trailing whitespace with ""
     return pd.DataFrame(data, index=[0])
 
-def _df_parser(jsonf) -> tuple[list, list]:
+def _df_parser(jsonf: str) -> tuple[list, list]:
     """.json to dataframe parser.
 
     Args:
@@ -56,19 +56,33 @@ def _df_parser(jsonf) -> tuple[list, list]:
     return cols, rows
 
 class json_db:
-    """Temp: convert .json to database. Target is sqlite3 and postgres4. Need to add a __repr__.
+    """Convert .json file to database file. sqlite3 and postgres4 are the supported sql distributions.
     """
 
     db_supp_types = ("sqlite", "postgres")
 
-    def __init__(self, db_type, json_f) -> None:
+    def __init__(self, db_type, jsonf) -> None:
         self.db_type = db_type
-        self.jsonf = json_f
+        self.jsonf = jsonf
         self.db_name = _fl_nm_parser(flstr = self.jsonf, f_type = "db")
 
+    def __repr__(self) -> str:
+        params = inspect.getfullargspec(__class__).args
+        params.remove("self")
+        return f'{__class__.__name__}({params[0]} = "{self.db_type}", {params[1]} = "{self.jsonf}", {params[2]} = "{self.db_name}")'
+
     @staticmethod
-    def _json_to_sqlite(jsonf, db_name) -> None:
-        
+    def _json_to_sqlite(jsonf: str, db_name: str) -> str:
+        """Convert .json file contents to a sqlite3 database.
+
+        Args:
+            * `jsonf` (_type_: str): .json file name/path.
+            * `db_name` (_type_): Name of .db file.
+
+        Returns:
+            _type_: str: Database name.
+        """
+
         import sqlite3
         cols, rows = _df_parser(jsonf = jsonf)
 
@@ -81,10 +95,18 @@ class json_db:
         for key, val in zip(cols, rows):
             cur.execute(f"INSERT INTO {table_name} (json_keys, json_values) VALUES (?,?)", (key,val))
         con.commit()
+        return db_name
 
     @staticmethod
-    def _json_to_postgres(jsonf):
-        
+    def _json_to_postgres(jsonf: str) -> str:
+        """Convert .json file contents to a postgres4 database.
+
+        Args:
+            * `jsonf` (_type_: str): .json file name/path.
+
+        Returns:
+            _type_: str: Database name.
+        """
 
         lst_dir = os.listdir(os.getcwd())
         for i in lst_dir:
@@ -98,7 +120,7 @@ class json_db:
         except NameError:
             print('No .ini file was found in the current working directory.')
 
-        def db_items(dictionary: dict, index: int) -> str:
+        def db_items(dictionary: dict, index: int) -> str:  # Get a dictionary item through its index and store it as a string.
             return list(dictionary.items())[index][1]
 
         import psycopg2
@@ -138,6 +160,15 @@ class json_db:
 
     @classmethod
     def __supp_db(cls, dbtp: str) -> None:
+        """Check if user selected database type is supported by the current version of the tool.
+
+        Args:
+            * `dbtp` (_type_: str): Type of selected database.
+
+        Raises:
+            TypeError: When selected database is not supported.
+        """
+
         if not dbtp in cls.db_supp_types:
             raise TypeError(f'Database engine {dbtp} is not supported. Supported database engines are: {", ".join(cls.db_supp_types)}')
 

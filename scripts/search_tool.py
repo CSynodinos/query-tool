@@ -25,13 +25,7 @@ class RegexError(Exception):
             return 'RegexError has been raised'
 
 class search_tools:
-    """_summary_
-
-    Raises:
-        RegexError: _description_
-
-    Returns:
-        _type_: _description_
+    """Tools for conducting a regex search in files.
     """
 
     txt_ext = ('.txt', '.ini', '.fasta')
@@ -48,10 +42,27 @@ class search_tools:
 
     @classmethod
     def _fl_parser(cls, fl: str, pat: str) -> (list | dict):
-        
+        """Parser method for parsing through files with extensions:
+            * .txt
+            * .ini
+            * .fasta
+            * .csv
+            * .tsv
+
+        Args:
+            * `fl` (_type_: str): File name/path.
+            * `pat` (_type_: str): Pattern to look for.
+
+        Returns:
+            list|dict:  dictionary with all the data found and their corresponding locations in the file.
+                        If multiple matches are found on the same location in the file, the dictionary will be wrapped in 
+                        a list.
+        """
+
         assert fl, 'No file name or path was provided.'
         assert pat, 'No pattern was provided.'
 
+        # Text Files.
         if fl.endswith(cls.txt_ext):
             data_found = []
             with open(fl, "r") as txt:
@@ -62,12 +73,13 @@ class search_tools:
                     ln_index = ln_index.replace('\n', '')
                     data_found.append(ln_index)
 
+        # Spreadsheet Files.
         elif fl.endswith(cls.sp_ext):
             data_found = {}
             with open(fl, "r", encoding = 'utf-8-sig') as csv_file:
                 csv_reader = csv.reader(csv_file, delimiter = ',')
                 headers = []
-            
+
                 # loop through csv and get the first row (headers)
                 for row in csv_reader:
                     headers.append(row)
@@ -81,6 +93,7 @@ class search_tools:
             cur = con.cursor()
             pd.read_csv(fl).to_sql("Table_1", con, 
                                         if_exists = 'replace', index = False)
+
             for i in headers:
                 statement = f"SELECT * FROM Table_1 WHERE {i} LIKE '{pat}';"
                 cur.execute(statement)
@@ -98,7 +111,16 @@ class search_tools:
         return data_found
 
     def _get_matches(self) -> dict:
-        
+        """Find the matches from a dictionary. If dictionary is wrapped in a list, it parses through the list elements
+        which will be dictionaries. Dictionary is generated from the _fl_parser class method.
+
+        Raises:
+            RegexError: Custom error generated when no regex output is generated.
+
+        Returns:
+            dict: A dictionary with all the matching locations and their values.
+        """
+
         parser_out = self._fl_parser(fl = self.fl, pat = self.pattern)
         found = {}
         if isinstance(parser_out, list):
@@ -114,4 +136,5 @@ class search_tools:
                     found[key] = value
         else:
             return parser_out
+
         return found
