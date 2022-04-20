@@ -159,7 +159,7 @@ class json_db:
         return pgdatabase
 
     @classmethod
-    def __supp_db(cls, dbtp: str) -> None:
+    def _supp_db(cls, dbtp: str) -> None:
         """Check if user selected database type is supported by the current version of the tool.
 
         Args:
@@ -172,11 +172,11 @@ class json_db:
         if not dbtp in cls.db_supp_types:
             raise TypeError(f'Database engine {dbtp} is not supported. Supported database engines are: {", ".join(cls.db_supp_types)}')
 
-    def invoker(self) -> None:
+    def invoker(self) -> str:
         """Invoker method for running the requested database generator.
         """
 
-        self.__supp_db(dbtp = self.db_type)
+        self._supp_db(dbtp = self.db_type)
         if self.db_type == "sqlite":
             invoked = self._json_to_sqlite(jsonf = self.jsonf, db_name = self.db_name)
             return invoked
