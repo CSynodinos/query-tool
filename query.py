@@ -67,7 +67,7 @@ def bool_parser(var: any) -> bool:
             raise TypeError(f"{var} must be true, True, 1, False, false, 0 or None.")
 
 def main():
-    message = ("Regex Query Tool. Returns a python dictionary with keys being all the lines/columns" 
+    message = ("\t\t\tRegex Query Tool\nReturns a python dictionary with keys being all the lines/columns" 
     "\nthat a pattern was found and the lines/cells themselves as values.\nSet -json "
     "option as True for writing the dictionary as a .json file.")
 
