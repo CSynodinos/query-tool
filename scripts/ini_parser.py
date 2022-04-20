@@ -26,10 +26,10 @@ class ini_handler:
         5 strings are returned for 5 fields.
 
         Args:
-            * `ini` (_type_: str): .ini file path/name.
+            * `ini` (_str_): .ini file path/name.
 
         Returns:
-            _type_: tuple: Tuple of strings for every returned value from the .ini file.
+            _tuple_: Tuple of strings for every returned value from the .ini file.
         """
 
         config = configparser.ConfigParser()
@@ -48,7 +48,7 @@ class ini_handler:
         5 fields, database name, username, password, host and port.
 
         Returns:
-            The python dictionary.
+            _dict_: The python dictionary.
         """
 
         database, pguser, pgpswd, pghost, pgport= self.__ini_parser(ini = self.ini)

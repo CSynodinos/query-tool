@@ -50,13 +50,13 @@ class search_tools:
             * .tsv
 
         Args:
-            * `fl` (_type_: str): File name/path.
-            * `pat` (_type_: str): Pattern to look for.
+            * `fl` (_str_): File name/path.
+            * `pat` (_str_): Pattern to look for.
 
         Returns:
-            list|dict:  dictionary with all the data found and their corresponding locations in the file.
-                        If multiple matches are found on the same location in the file, the dictionary will be wrapped in 
-                        a list.
+            _list_|_dict_:  dictionary with all the data found and their corresponding locations in the file.
+                            If multiple matches are found on the same location in the file, the dictionary will be wrapped in 
+                            a list.
         """
 
         assert fl, 'No file name or path was provided.'
@@ -118,7 +118,7 @@ class search_tools:
             RegexError: Custom error generated when no regex output is generated.
 
         Returns:
-            dict: A dictionary with all the matching locations and their values.
+            _dict_: A dictionary with all the matching locations and their values.
         """
 
         parser_out = self._fl_parser(fl = self.fl, pat = self.pattern)
