@@ -29,7 +29,7 @@ def args_parser(msg) -> argparse.Namespace:
         * `msg` (_str_): Description help message.
 
     Returns:
-        _argparse.Namespace_: Namespace of input arguments.
+        argparse.Namespace: Namespace of input arguments.
     """
 
     parser = argparse.ArgumentParser(description = msg, formatter_class = argparse.RawDescriptionHelpFormatter)
@@ -51,7 +51,7 @@ def bool_parser(var: any) -> bool:
         TypeError: Unable to convert to boolean.
 
     Returns:
-        _bool_.
+        boolean: True if var is boolean, False if not.
     """
 
     _true = ["true", "True", "1"]

@@ -12,11 +12,11 @@ def _fl_nm_parser(flstr: str, f_type: str) -> str:
     Adds a different extension at the end of it.
 
     Args:
-        * `flstr` (_str_): File name.
-        * `f_type` (_str_): Extension type to return.
+        * `flstr` (str): File name.
+        * `f_type` (str): Extension type to return.
 
     Returns:
-        _str_: Name of file without path and extension
+        str: Name of file without path and extension
     """
 
     nm = f"{flstr.rsplit('.', 1)[0]}.{f_type}"
@@ -28,10 +28,10 @@ def __json_df_parser(jfl: str) -> pd.DataFrame:
     """Parses  through a .json file and writes into a pandas dataframe.
 
     Args:
-        * `jfl` (_str_): .json file to parse.
+        * `jfl` (str): .json file to parse.
 
     Returns:
-        _str_: `pd.DataFrame`: A pandas dataframe containing the keys of a .json as columns and the values as rows.
+        pd.DataFrame: A pandas dataframe containing the keys of a .json as columns and the values as rows.
     """
 
     with open(jfl) as f:
@@ -43,10 +43,10 @@ def _df_parser(jsonf: str) -> tuple[list, list]:
     """.json to dataframe parser.
 
     Args:
-        * `jsonf` (_str_): .json file to parse.
+        * `jsonf` (str): .json file to parse.
 
     Returns:
-        _str_: `list`, `list`: Two lists containing all column names and row values as separate elements.
+        tuple[list, list]: Two lists containing all column names and row values as separate elements.
     """
 
     df = __json_df_parser(jfl = jsonf)
@@ -76,11 +76,11 @@ class json_db:
         """Convert .json file contents to a sqlite3 database.
 
         Args:
-            * `jsonf` (_str_): .json file name/path.
-            * `db_name` (_str_): Name of .db file.
+            * `jsonf` (str): .json file name/path.
+            * `db_name` (str): Name of .db file.
 
         Returns:
-            _str_: Database name.
+            str: Database name.
         """
 
         import sqlite3
@@ -102,10 +102,10 @@ class json_db:
         """Convert .json file contents to a postgres4 database.
 
         Args:
-            * `jsonf` (_str_): .json file name/path.
+            * `jsonf` (str): .json file name/path.
 
         Returns:
-            _str_: Database name.
+            str: Database name.
         """
 
         lst_dir = os.listdir(os.getcwd())
@@ -163,7 +163,7 @@ class json_db:
         """Check if user selected database type is supported by the current version of the tool.
 
         Args:
-            * `dbtp` (_str_): Type of selected database.
+            * `dbtp` (str): Type of selected database.
 
         Raises:
             TypeError: When selected database is not supported.

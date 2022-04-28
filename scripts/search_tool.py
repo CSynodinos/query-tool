@@ -50,11 +50,11 @@ class search_tools:
             * .tsv
 
         Args:
-            * `fl` (_str_): File name/path.
-            * `pat` (_str_): Pattern to look for.
+            * `fl` (str): File name/path.
+            * `pat` (str): Pattern to look for.
 
         Returns:
-            _list_|_dict_:  dictionary with all the data found and their corresponding locations in the file.
+            list | dict:  dictionary with all the data found and their corresponding locations in the file.
                             If multiple matches are found on the same location in the file, the dictionary will be wrapped in 
                             a list.
         """
@@ -118,7 +118,7 @@ class search_tools:
             RegexError: Custom error generated when no regex output is generated.
 
         Returns:
-            _dict_: A dictionary with all the matching locations and their values.
+            dict: A dictionary with all the matching locations and their values.
         """
 
         parser_out = self._fl_parser(fl = self.fl, pat = self.pattern)

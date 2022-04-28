@@ -21,7 +21,7 @@ class query_tool(search_tools):
         """Dictionary parser.
 
         Args:
-            * `dictionary` (_dict_): Dictionary object.
+            * `dictionary` (dict): Dictionary object.
 
         Returns:
             tuple[str, str]: keys and values of a dictionary as separate strings.
@@ -43,10 +43,10 @@ class query_tool(search_tools):
         """Run a SQL query. This method is a wrapper to the methods holding the queries.
 
         Args:
-            * `show_idx` (_bool_): Shows regex information in stdout.
+            * `show_idx` (bool): Shows regex information in stdout.
 
         Returns:
-            _dict_: Keys are equal to file locations and values are matched information.
+            dict: Keys are equal to file locations and values are matched information.
         """
 
         matches = self._get_matches()
