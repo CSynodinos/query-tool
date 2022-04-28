@@ -1,6 +1,6 @@
 #!/usr/bin/env python3
 from __future__ import annotations
-import configparser
+import configparser, inspect
 
 class ini_handler:
     """.ini file handler.
@@ -19,6 +19,31 @@ class ini_handler:
 
     def __init__(self, ini: str) -> None:
         self.ini = ini
+
+    @classmethod
+    def __repr__(cls) -> str:
+        params = inspect.getfullargspec(__class__).args
+        params.remove("self")
+        return params
+
+    @classmethod
+    def __dir__(cls, only_added = False) -> list:
+        """Display function attributes.
+
+        Args:
+            * `only_added` (bool, optional): Choose whether to display only the specified attributes. Defaults to False.
+
+        Returns:
+            list: List of attributes.
+        """
+
+        all_att = list(cls.__dict__.keys())
+        if not only_added:
+            return all_att
+        else:
+            default_atts = ['__module__', '__doc__', '__dict__', '__weakref__']
+            all_att = [x for x in all_att if x not in default_atts]
+            return all_att
 
     @staticmethod
     def __ini_parser(ini: str) -> tuple[str, str, str, str, str]:

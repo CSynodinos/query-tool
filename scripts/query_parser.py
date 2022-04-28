@@ -11,10 +11,30 @@ class query_tool(search_tools):
     def __init__(self, fl: str, pattern: str) -> None:
         super().__init__(fl, pattern)
 
-    def __repr__(self) -> str:
+    @classmethod
+    def __repr__(cls) -> str:
         params = inspect.getfullargspec(__class__).args
         params.remove("self")
-        return f'{__class__.__name__}({params[0]} = "{self.fl}", {params[1]} = "{self.pattern}")'
+        return params
+
+    @classmethod
+    def __dir__(cls, only_added = False) -> list:
+        """Display function attributes.
+
+        Args:
+            * `only_added` (bool, optional): Choose whether to display only the specified attributes. Defaults to False.
+
+        Returns:
+            list: List of attributes.
+        """
+
+        all_att = list(cls.__dict__.keys())
+        if not only_added:
+            return all_att
+        else:
+            default_atts = ['__module__', '__doc__', '__dict__', '__weakref__']
+            all_att = [x for x in all_att if x not in default_atts]
+            return all_att
 
     @staticmethod
     def _dict_parser(dictionary: dict) -> tuple[str, str]:
