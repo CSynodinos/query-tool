@@ -25,7 +25,7 @@ def _fl_nm_parser(flstr: str, f_type: str) -> str:
     return nm
 
 def __json_df_parser(jfl: str) -> pd.DataFrame:
-    """Parses  through a .json file and writes into a pandas dataframe.
+    """Parses through a .json file and writes into a pandas dataframe.
 
     Args:
         * `jfl` (str): .json file to parse.
