@@ -60,7 +60,7 @@ class query_tool(search_tools):
         return keys, values
 
     def query_wrapper(self, show_idx) -> dict:
-        """Run a SQL query. This method is a wrapper to the methods holding the queries.
+        """Run an SQL or txt file query. This method is a wrapper to the methods holding the queries.
 
         Args:
             * `show_idx` (bool): Shows regex information in stdout.
