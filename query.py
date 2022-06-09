@@ -5,23 +5,6 @@ import argparse, os
 from scripts.query_parser import query_tool
 from scripts.json_db import json_db, _fl_nm_parser
 
-class InputflError(Exception):
-    """Custom exception class for input files."""
-
-    __module__ = 'builtins'
-
-    def __init__(self, *args) -> None:
-        if args:
-            self.errmessage = args[0]
-        else:
-            self.errmessage = None
-
-    def __repr__(self) -> str:
-        if self.errmessage:
-            return '{0} '.format(self.errmessage)
-        else:
-            return 'InputflError has been raised'
-
 def args_parser(msg) -> argparse.Namespace:
     """Custom argument parser.
 
