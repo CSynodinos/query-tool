@@ -9,4 +9,4 @@ __pycache__
 example_files
 .DS_Store
 *.ini
-*.md
+program_structure.md
