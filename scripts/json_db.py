@@ -192,12 +192,14 @@ class json_db:
         if not dbtp in cls.db_supp_types:
             raise TypeError(f'Database engine {dbtp} is not supported. Supported database engines are: {", ".join(cls.db_supp_types)}')
 
-    def invoker(self) -> str:
+    def invoker(self, out) -> str:
         """Invoker method for running the requested database generator.
         """
 
         self._supp_db(dbtp = self.db_type)
         if self.db_type == "sqlite":
+            if out:
+                self.db_name = os.path.join(out, self.db_name)
             invoked = self._json_to_sqlite(jsonf = self.jsonf, db_name = self.db_name)
             return invoked
         elif self.db_type == "postgres":
