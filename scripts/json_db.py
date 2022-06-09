@@ -155,7 +155,6 @@ class json_db:
 
         conn = psycopg2.connect(user = pguser, password = pgpassword)
         conn.autocommit = True
-
         cur = conn.cursor()
 
         # Create database and exit.
@@ -170,6 +169,7 @@ class json_db:
         table_name = f'{Path(jsonf).stem}_table'
         cur.execute(f"""CREATE TABLE {table_name} (json_keys VARCHAR(255) UNIQUE NOT NULL, json_values VARCHAR(255) UNIQUE NOT NULL)""")
         cols, rows = _df_parser(jsonf = jsonf)
+
         # Iterate through cols and rows and add each column values into json_keys column and each rows value into json_values column.
         for key, val in zip(cols, rows):
             cur.execute(f"INSERT INTO {table_name} (json_keys, json_values) VALUES (%s,%s)", (key,val))
