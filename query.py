@@ -35,10 +35,10 @@ def args_parser(msg) -> argparse.Namespace:
     parser = argparse.ArgumentParser(description = msg, formatter_class = argparse.RawDescriptionHelpFormatter)
     parser.add_argument("-f", help = "Input file.")
     parser.add_argument("-p", help = "Pattern to look for. If the file is a txt type file, specify a string pattern. If the file is a .csv or .tsv file, specify a csv file containing the patterns to look for.")
-    parser.add_argument("-json", help = "Optional argument: Export into .json file format. Key is either the lines the pattern was found in (for txt type files) or the columns (for .csv or .tsv files).")
+    parser.add_argument("-json", help = "Optional argument: Export into .json file format. Key is either the lines the pattern was found in (for .txt type files) or the columns (for .csv or .tsv files).")
     parser.add_argument("-db", help = "Optional argument: Write the .json output file in a new database when option -json is used. If -pg option is not set, the database will be sqlite3")
     parser.add_argument("-pg", help = "Optional argument: Write the .json output file in a new postgres 4 database when option -json is used.")
-    parser.add_argument("-inf", help = "Optional argument: Display information about findings.")
+    parser.add_argument("-inf", help = "Optional argument: Display information about findings in the stdout.")
     return parser.parse_args()
 
 def bool_parser(var: any) -> bool:
