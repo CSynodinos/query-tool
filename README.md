@@ -20,6 +20,11 @@ This tool is capable of identifying user specified patterns in text and spreadsh
     >>> query.py -h
 ```
 
+## Installation
+```bash
+    >>> curl https://raw.githubusercontent.com/CSynodinos/query-tool
+```
+
 ## Database integration
 
 All patterns identified can be stored into a .json file regardless of the input file type, by using the -json argument.The json file gets the same name as the input file. If the -json option is used, the database options become functional. By using the -db option, the -json file will be saved in an sqlite3 type database that will be automatically generated. If the -pg option is used with the -db option, the database is instead a postgres 4 database.
