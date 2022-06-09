@@ -1,4 +1,4 @@
-# Query Tool
+# Regex Query Tool
 A Python query tool using regex to identify and store user specified file patterns.
 
 ## Authors
