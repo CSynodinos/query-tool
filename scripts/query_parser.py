@@ -73,7 +73,7 @@ class query_tool(search_tools):
         keys, values = self._dict_parser(dictionary = matches)
 
         if show_idx:
-            print(f"There are {len(matches)} matches to the pattern {self.pattern}")
+            print(f"There are {len(matches)} matches to the pattern: {self.pattern}")
             if self.fl.endswith(self.txt_ext):
                 if len(keys) > 1:
                     print(f"Pattern can be found on lines: {keys}.")
