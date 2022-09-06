@@ -4,8 +4,9 @@ from __future__ import annotations
 import argparse, os
 from scripts.query_parser import query_tool
 from scripts.json_db import json_db, _fl_nm_parser
+from typing import Any
 
-def args_parser(msg) -> argparse.Namespace:
+def args_parser(msg: str) -> argparse.Namespace:
     """Custom argument parser.
 
     Args:
@@ -25,7 +26,7 @@ def args_parser(msg) -> argparse.Namespace:
     parser.add_argument("-inf", help = "Optional argument: Display information about findings in the stdout.")
     return parser.parse_args()
 
-def bool_parser(var: any) -> bool:
+def bool_parser(var: Any) -> bool:
     """Check if parameter is boolean, if not, convert it to boolean.
 
     Args:
@@ -87,20 +88,20 @@ def main():
                 print('Insertion of .json keys and values into a postgres4 database.')
                 output = json_db(db_type = 'postgres', jsonf = json_n).invoker(out = o)
                 print(f'Operation Complete! Data parsed into the {output} database.')
-                return out
+                #return out
             else:
                 print('Insertion of .json keys and values into a sqlite3 database.')
                 json_db(db_type = 'sqlite', jsonf = json_n).invoker(out = o)
                 print('Operation Complete!')
-                return out
-        else:
-            return out
+                #return out
+        #else:
+            #return out
 
     if not to_json:
         if json_to_db:
             raise RuntimeError("Option -db was used without setting option -json as True.")
-        else:
-            return out
+        #else:
+            #return out
 
 if __name__ == "__main__":
     main()
