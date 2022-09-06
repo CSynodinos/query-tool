@@ -2,7 +2,7 @@
 from __future__ import annotations
 
 import inspect
-from scripts.search_tool import search_tools
+from lib.search_tool import search_tools
 
 class query_tool(search_tools):
     """Query tool class containing methods to run queries for regex patterns in files.

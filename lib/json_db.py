@@ -5,7 +5,7 @@ import os, json, inspect
 import numpy as np
 import pandas as pd
 from pathlib import Path
-from scripts.ini_parser import ini_handler
+from lib.ini_parser import ini_handler
 
 def _fl_nm_parser(flstr: str, f_type: str) -> str:
     """File name parser. Extracts the name of a file without the path and extension.

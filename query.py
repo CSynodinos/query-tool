@@ -2,8 +2,8 @@
 from __future__ import annotations
 
 import argparse, os
-from scripts.query_parser import query_tool
-from scripts.json_db import json_db, _fl_nm_parser
+from lib.query_parser import query_tool
+from lib.json_db import json_db, _fl_nm_parser
 from typing import Any
 
 def args_parser(msg: str) -> argparse.Namespace:

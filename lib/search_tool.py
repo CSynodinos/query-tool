@@ -4,7 +4,7 @@ from __future__ import annotations
 import re, csv
 import pandas as pd
 import os, inspect
-from scripts.exceptions import RegexError
+from lib.exceptions import RegexError
 
 class search_tools:
     """Tools for conducting a regex search in files.
