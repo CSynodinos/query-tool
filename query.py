@@ -4,6 +4,7 @@ from __future__ import annotations
 import argparse, os
 from lib.query_parser import query_tool
 from lib.json_db import json_db, _fl_nm_parser
+from lib.utils import terminal_str_formatter
 from typing import Any, Final
 
 def args_parser(msg: str) -> argparse.Namespace:
@@ -72,6 +73,10 @@ def main():
     JSON_POSTGRES: str | None = ARGUMENTS.get('pg')
     INFO: bool = ARGUMENTS.get('inf')
 
+    TITLE = 'Query Tool'
+    print('\n')
+    print(terminal_str_formatter(_str_ = TITLE))
+    print('\nInitialize query...\n')
     out: dict = query_tool(fl = FILE, pattern = PATTERN).query_wrapper(show_idx = INFO)
     if JSON:
         if not JSON_NAME == None or JSON_NAME == 'None':
@@ -104,5 +109,6 @@ def main():
         if JSON_DB:
             raise RuntimeError("Option -db was used without setting option -json as True.")
 
+    print('\nQuery completed successfully, exiting...\n')
 if __name__ == "__main__":
     main()
