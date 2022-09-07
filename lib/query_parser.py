@@ -7,6 +7,10 @@ from lib.utils import dunders
 
 class query_tool(search_tools, dunders):
     """Query tool class containing methods to run queries for regex patterns in files.
+
+        Args:
+            * `fl` (str): Input file.
+            * `pattern` (str): Input pattern.
     """
 
     def __init__(self, fl: str, pattern: str) -> None:
