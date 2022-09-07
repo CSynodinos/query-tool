@@ -73,7 +73,7 @@ def main():
     JSON_POSTGRES: str | None = ARGUMENTS.get('pg')
     INFO: bool = ARGUMENTS.get('inf')
 
-    TITLE = 'Query Tool'
+    TITLE = 'Regex Query Tool'
     print('\n')
     print(terminal_str_formatter(_str_ = TITLE))
     print('\nInitialize query...\n')
