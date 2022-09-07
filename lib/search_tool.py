@@ -3,10 +3,11 @@ from __future__ import annotations
 
 import re, csv
 import pandas as pd
-import os, inspect
+import os
 from lib.exceptions import RegexError
+from lib.utils import dunders
 
-class search_tools:
+class search_tools(dunders):
     """Tools for conducting a regex search in files.
     """
 
@@ -16,31 +17,7 @@ class search_tools:
     def __init__(self, fl: str, pattern: str) -> None:
         self.fl = fl
         self.pattern = pattern
-
-    @classmethod
-    def __repr__(cls) -> str:
-        params = inspect.getfullargspec(__class__).args
-        params.remove("self")
-        return params
-
-    @classmethod
-    def __dir__(cls, only_added = False) -> list:
-        """Display function attributes.
-
-        Args:
-            * `only_added` (bool, optional): Choose whether to display only the specified attributes. Defaults to False.
-
-        Returns:
-            list: List of attributes.
-        """
-
-        all_att = list(cls.__dict__.keys())
-        if not only_added:
-            return all_att
-        else:
-            default_atts = ['__module__', '__doc__', '__dict__', '__weakref__']
-            all_att = [x for x in all_att if x not in default_atts]
-            return all_att
+        super().__init__()
 
     @classmethod
     def _fl_parser(cls, fl: str, pat: str) -> (list | dict):
