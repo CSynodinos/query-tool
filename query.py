@@ -58,10 +58,14 @@ def bool_parser(var: Any) -> bool:
             raise TypeError(f"{var} must be true, True, 1, False, false, 0 or None.")
 
 def main():
-    MESSAGE = ("\t\t\tRegex Query Tool\n\nReturns a python dictionary with keys being all the lines/columns" 
+    MESSAGE = ("\n\nReturns a python dictionary with keys being all the lines/columns" 
     "\nthat a pattern was found and the lines/cells themselves as values.\nSet -json "
     "option as True for writing the dictionary as a .json file.")
 
+    TITLE = 'Regex Query Tool'
+    print('\n')
+    print(terminal_str_formatter(_str_ = TITLE))
+    print('\n')
     ARGS_NAMESPACE: argparse.Namespace = args_parser(msg = MESSAGE)
     ARGUMENTS: dict[str, Any] = vars(ARGS_NAMESPACE)
     FILE: str | None = ARGUMENTS.get('f')
@@ -73,10 +77,6 @@ def main():
     JSON_POSTGRES: str | None = ARGUMENTS.get('pg')
     INFO: bool = ARGUMENTS.get('inf')
 
-    TITLE = 'Regex Query Tool'
-    print('\n')
-    print(terminal_str_formatter(_str_ = TITLE))
-    print('\nInitialize query...\n')
     out: dict = query_tool(fl = FILE, pattern = PATTERN).query_wrapper(show_idx = INFO)
     if JSON:
         if not JSON_NAME == None or JSON_NAME == 'None':
