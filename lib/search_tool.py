@@ -9,6 +9,10 @@ from lib.utils import dunders
 
 class search_tools(dunders):
     """Tools for conducting a regex search in files.
+
+    Args:
+        * `fl` (str): Input file.
+        * `pattern` (str): Input pattern.
     """
 
     txt_ext = ('.txt', '.ini', '.fasta')
