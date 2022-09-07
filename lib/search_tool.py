@@ -37,7 +37,7 @@ class search_tools(dunders):
             * `pat` (str): Pattern to look for.
 
         Returns:
-            list | dict:  dictionary with all the data found and their corresponding locations in the file.
+            `list | dict`:  dictionary with all the data found and their corresponding locations in the file.
                             If multiple matches are found on the same location in the file, the dictionary will be wrapped in 
                             a list.
         """
@@ -98,10 +98,10 @@ class search_tools(dunders):
         which will be dictionaries. Dictionary is generated from the _fl_parser class method.
 
         Raises:
-            RegexError: Custom error generated when no regex output is generated.
+            * `RegexError`: Custom error generated when no regex output is generated.
 
         Returns:
-            dict: A dictionary with all the matching locations and their values.
+            `dict`: A dictionary with all the matching locations and their values.
         """
 
         parser_out = self._fl_parser(fl = self.fl, pat = self.pattern)
