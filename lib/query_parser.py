@@ -24,7 +24,7 @@ class query_tool(search_tools, dunders):
             * `dictionary` (dict): Dictionary object.
 
         Returns:
-            tuple[str, str]: keys and values of a dictionary as separate strings.
+            `tuple[str, str]`: keys and values of a dictionary as separate strings.
         """
 
         keys = []
@@ -46,7 +46,7 @@ class query_tool(search_tools, dunders):
             * `show_idx` (bool): Shows regex information in stdout.
 
         Returns:
-            dict: Keys are equal to file locations and values are matched information.
+            `dict`: Keys are equal to file locations and values are matched information.
         """
 
         matches = self._get_matches()
