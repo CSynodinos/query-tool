@@ -7,7 +7,7 @@ import pandas as pd
 from pathlib import Path
 from lib.ini_parser import ini_handler
 from lib.utils import dunders
-from lib.exceptions import DBTypeError
+from lib.exceptions import DBTypeError, InputflError
 
 def _fl_nm_parser(flstr: str, f_type: str) -> str:
     """File name parser. Extracts the name of a file without the path and extension.
@@ -59,13 +59,26 @@ def _df_parser(jsonf: str) -> tuple[list, list]:
 
 class json_db(dunders):
     """Convert .json file to database file. sqlite3 and postgres4 are the supported sql distributions.
+
+    Args:
+        * `db_type` (str): _description_
+        * `jsonf` (str): Name of .json file.
+        * `ini` (str, optional): Name of .ini file for postgres parsing. Defaults to None.
+
+    Raises:
+        `InputflError`: _description_
     """
 
     db_supp_types = ("sqlite", "postgres")
 
-    def __init__(self, db_type, jsonf) -> None:
+    def __init__(self, db_type, jsonf, ini = None) -> None:
         self.db_type = db_type
         self.jsonf = jsonf
+        self.ini = ini
+        if not self.ini == None:
+            if not os.path.isfile(self.ini):
+                raise InputflError(f'.ini file: {self.ini} does not exist.')
+
         self.db_name = _fl_nm_parser(flstr = self.jsonf, f_type = "db")
         super().__init__()
 
@@ -95,8 +108,7 @@ class json_db(dunders):
         con.commit()
         return db_name
 
-    @staticmethod
-    def _json_to_postgres(jsonf: str) -> str:
+    def _json_to_postgres(self, jsonf: str) -> str:
         """Convert .json file contents to a postgres4 database.
 
         Args:
@@ -106,25 +118,13 @@ class json_db(dunders):
             str: Database name.
         """
 
-        lst_dir = os.listdir(os.getcwd())
-        for i in lst_dir:
-            if not i.endswith('.ini'):
-                continue
-            else:
-                inifl = i
-                break
-        try:
-            inifl
-        except NameError:
-            print('No .ini file was found in the current working directory.')
-
         def db_items(dictionary: dict, index: int) -> str:  # Get a dictionary item through its index and store it as a string.
             return list(dictionary.items())[index][1]
 
         import psycopg2
 
         # Parse .ini to get db info
-        db_info = ini_handler(ini = 'anini.ini')._ini_to_dict()
+        db_info = ini_handler(ini = self.ini)._ini_to_dict()
         pgdatabase = db_items(dictionary = db_info, index = 0)
         pguser = db_items(dictionary = db_info, index = 1)
         pgpassword = db_items(dictionary = db_info, index = 2)
