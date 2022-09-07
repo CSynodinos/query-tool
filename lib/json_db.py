@@ -66,7 +66,7 @@ class json_db(dunders):
         * `ini` (str, optional): Name of .ini file for postgres parsing. Defaults to None.
 
     Raises:
-        `InputflError`: _description_
+        `InputflError`: Input file does not exist.
     """
 
     db_supp_types = ("sqlite", "postgres")
@@ -91,7 +91,7 @@ class json_db(dunders):
             * `db_name` (str): Name of .db file.
 
         Returns:
-            str: Database name.
+            `str`: Database name.
         """
 
         import sqlite3
@@ -115,7 +115,7 @@ class json_db(dunders):
             * `jsonf` (str): .json file name/path.
 
         Returns:
-            str: Database name.
+            `str`: Database name.
         """
 
         def db_items(dictionary: dict, index: int) -> str:  # Get a dictionary item through its index and store it as a string.
@@ -164,7 +164,7 @@ class json_db(dunders):
             * `dbtp` (str): Type of selected database.
 
         Raises:
-            DBTypeError: When selected database is not supported.
+            `DBTypeError`: When selected database is not supported.
         """
 
         if not dbtp in cls.db_supp_types:
