@@ -32,31 +32,6 @@ def args_parser(msg: str) -> argparse.Namespace:
     PARSER.add_argument("-inf", action = 'store_true', help = "Optional argument: Display information about findings in the stdout.")
     return PARSER.parse_args()
 
-def bool_parser(var: Any) -> bool:
-    """Check if parameter is boolean, if not, convert it to boolean.
-
-    Args:
-        * `var` (Any): variable to check for boolean.
-
-    Raises:
-        TypeError: Unable to convert to boolean.
-
-    Returns:
-        boolean: True if var is boolean, False if not.
-    """
-
-    _true = ["true", "True", "1"]
-    _false = ["false", "False", "0", None]
-    if type(var) == bool:
-        return var
-    else:
-        if var in _true:
-            return True
-        elif var in _false:
-            return False
-        else:
-            raise TypeError(f"{var} must be true, True, 1, False, false, 0 or None.")
-
 def main():
     MESSAGE = ("\n\nReturns a python dictionary with keys being all the lines/columns" 
     "\nthat a pattern was found and the lines/cells themselves as values.\nSet -json "
