@@ -1,11 +1,13 @@
 #!/usr/bin/env python3
 from __future__ import annotations
 
-import os, json, inspect
+import os, json
 import numpy as np
 import pandas as pd
 from pathlib import Path
 from lib.ini_parser import ini_handler
+from lib.utils import dunders
+from lib.exceptions import DBTypeError
 
 def _fl_nm_parser(flstr: str, f_type: str) -> str:
     """File name parser. Extracts the name of a file without the path and extension.
@@ -55,7 +57,7 @@ def _df_parser(jsonf: str) -> tuple[list, list]:
     rows = np.array(rows).tolist()[0]
     return cols, rows
 
-class json_db:
+class json_db(dunders):
     """Convert .json file to database file. sqlite3 and postgres4 are the supported sql distributions.
     """
 
@@ -65,31 +67,7 @@ class json_db:
         self.db_type = db_type
         self.jsonf = jsonf
         self.db_name = _fl_nm_parser(flstr = self.jsonf, f_type = "db")
-
-    @classmethod
-    def __repr__(cls) -> str:
-        params = inspect.getfullargspec(__class__).args
-        params.remove("self")
-        return params
-
-    @classmethod
-    def __dir__(cls, only_added = False) -> list:
-        """Display function attributes.
-
-        Args:
-            * `only_added` (bool, optional): Choose whether to display only the specified attributes. Defaults to False.
-
-        Returns:
-            list: List of attributes.
-        """
-
-        all_att = list(cls.__dict__.keys())
-        if not only_added:
-            return all_att
-        else:
-            default_atts = ['__module__', '__doc__', '__dict__', '__weakref__']
-            all_att = [x for x in all_att if x not in default_atts]
-            return all_att
+        super().__init__()
 
     @staticmethod
     def _json_to_sqlite(jsonf: str, db_name: str) -> str:
@@ -186,22 +164,27 @@ class json_db:
             * `dbtp` (str): Type of selected database.
 
         Raises:
-            TypeError: When selected database is not supported.
+            DBTypeError: When selected database is not supported.
         """
 
         if not dbtp in cls.db_supp_types:
-            raise TypeError(f'Database engine {dbtp} is not supported. Supported database engines are: {", ".join(cls.db_supp_types)}')
+            raise DBTypeError(f'Database engine {dbtp} is not supported. Supported database engines are: {", ".join(cls.db_supp_types)}')
 
     def invoker(self, out) -> str:
         """Invoker method for running the requested database generator.
         """
 
+        func_dict = {'sqlite': self._json_to_sqlite,
+                    'postgres': self._json_to_postgres}
+
         self._supp_db(dbtp = self.db_type)
-        if self.db_type == "sqlite":
+        if self.db_type in func_dict:
             if out:
                 self.db_name = os.path.join(out, self.db_name)
-            invoked = self._json_to_sqlite(jsonf = self.jsonf, db_name = self.db_name)
+            if self.db_type == 'sqlite':
+                invoked = func_dict[self.db_type](self.jsonf, db_name = self.db_name)
+            else:
+                invoked = func_dict[self.db_type](jsonf = self.jsonf)
             return invoked
-        elif self.db_type == "postgres":
-            invoked = self._json_to_postgres(jsonf = self.jsonf)
-            return invoked
+        else:
+            raise KeyError(f'{self.db_type} key is not present in the functions dictionary in the invoker method.')
