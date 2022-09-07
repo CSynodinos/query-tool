@@ -8,5 +8,5 @@ __pycache__
 *.json
 example_files
 .DS_Store
-*.ini
+anini.ini
 program_structure.md
