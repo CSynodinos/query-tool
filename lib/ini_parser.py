@@ -32,7 +32,7 @@ class ini_handler(dunders):
             * `ini` (_str_): .ini file path/name.
 
         Returns:
-            tuple: Tuple of strings for every returned value from the .ini file.
+            `tuple`: Tuple of strings for every returned value from the .ini file.
         """
 
         config = configparser.ConfigParser()
@@ -51,7 +51,7 @@ class ini_handler(dunders):
         5 fields, database name, username, password, host and port.
 
         Returns:
-            dict: The python dictionary.
+            `dict`: The python dictionary.
         """
 
         database, pguser, pgpswd, pghost, pgport= self.__ini_parser(ini = self.ini)
